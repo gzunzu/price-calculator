@@ -1,6 +1,7 @@
 package org.gzunzu.domain.ports;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import org.gzunzu.domain.model.Price;
 
 import java.time.LocalDateTime;
@@ -8,14 +9,14 @@ import java.util.List;
 
 public interface PriceService extends BasicEntityService<Price, Long> {
 
-    List<Price> getByBrandId(final Integer brandId);
+    List<Price> getByBrandId(@NotNull final Integer brandId);
 
-    List<Price> getByProductId(final Long productId);
+    List<Price> getByProductId(@NotNull final Long productId);
 
-    List<Price> getByStartDateNotAfterAndEndDateNotBefore(final LocalDateTime startDate, final LocalDateTime endDate);
+    List<Price> getByStartDateNotAfterAndEndDateNotBefore(@NotNull final LocalDateTime purchaseDate);
 
 
-    Price getHighestPriorityByProductIdAndBrandIdAndStartDateNotAfterAndEndDateNotBefore(final Integer brandId,
-                                                                                         final Long productId,
-                                                                                         final LocalDateTime purchaseDate) throws EntityNotFoundException;
+    Price getHighestPriorityByProductIdAndBrandIdAndStartDateNotAfterAndEndDateNotBefore(@NotNull final Integer brandId,
+                                                                                         @NotNull final Long productId,
+                                                                                         @NotNull final LocalDateTime purchaseDate) throws EntityNotFoundException;
 }
