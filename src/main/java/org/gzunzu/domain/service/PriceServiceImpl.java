@@ -1,6 +1,7 @@
 package org.gzunzu.domain.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import org.gzunzu.domain.model.Price;
 import org.gzunzu.domain.ports.PriceService;
 import org.gzunzu.domain.repositories.PriceRepository;
@@ -21,24 +22,24 @@ public class PriceServiceImpl extends BasicEntityServiceImpl<Price, Long> implem
     }
 
     @Override
-    public final List<Price> getByBrandId(final Integer brandId) {
+    public final List<Price> getByBrandId(@NotNull final Integer brandId) {
         return priceRepository.findByBrandId(brandId);
     }
 
     @Override
-    public final List<Price> getByProductId(final Long productId) {
+    public final List<Price> getByProductId(@NotNull final Long productId) {
         return priceRepository.findByProductId(productId);
     }
 
     @Override
-    public List<Price> getByStartDateNotAfterAndEndDateNotBefore(final LocalDateTime startDate, final LocalDateTime endDate) {
-        return priceRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
+    public List<Price> getByStartDateNotAfterAndEndDateNotBefore(@NotNull final LocalDateTime purchaseDate) {
+        return priceRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(purchaseDate, purchaseDate);
     }
 
     @Override
-    public final Price getHighestPriorityByProductIdAndBrandIdAndStartDateNotAfterAndEndDateNotBefore(final Integer brandId,
-                                                                                                      final Long productId,
-                                                                                                      final LocalDateTime purchaseDate) throws EntityNotFoundException {
+    public final Price getHighestPriorityByProductIdAndBrandIdAndStartDateNotAfterAndEndDateNotBefore(@NotNull final Integer brandId,
+                                                                                                      @NotNull final Long productId,
+                                                                                                      @NotNull final LocalDateTime purchaseDate) throws EntityNotFoundException {
         return priceRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(brandId,
                         productId,
                         purchaseDate,
