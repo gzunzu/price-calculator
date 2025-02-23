@@ -1,4 +1,4 @@
-package org.gzunzu.adapter.api.controllers;
+package org.gzunzu.adapter.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,7 +47,9 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
                     description = "Entity found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "404",
-                    description = "Entity not found")
+                    description = "Entity not found"),
+            @ApiResponse(responseCode = "500",
+                    description = "Error searching entity")
     })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<R> get(@PathVariable(name = "id") final K id) {
@@ -56,6 +58,9 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
         } catch (final EntityNotFoundException exception) {
             log.warn(exception.getMessage(), exception);
             return ResponseEntity.notFound().build();
+        } catch (final Exception exception) {
+            log.warn(exception.getMessage(), exception);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -76,7 +81,7 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
         try {
             List<R> result = mapper.toRs(service.getAll());
             return CollectionUtils.isEmpty(result) ? ResponseEntity.noContent().build() : ResponseEntity.ok(result);
-        } catch (final EntityNotFoundException exception) {
+        } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
             return ResponseEntity.internalServerError().build();
         }

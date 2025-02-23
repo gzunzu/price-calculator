@@ -60,7 +60,7 @@ class PriceServiceImplTest {
 
     @Test
     void test_getById_entityFound() {
-        final Price entity = getSamplePrice(1L, 1);
+        final Price entity = getPriceEntitySample(1L, 1);
 
         doReturn(Optional.of(entity))
                 .when(repository)
@@ -94,8 +94,8 @@ class PriceServiceImplTest {
 
     @Test
     void test_getAll_entitiesFound() {
-        final Price entity1 = getSamplePrice(1L, 1);
-        final Price entity2 = getSamplePrice(2L, 2);
+        final Price entity1 = getPriceEntitySample(1L, 1);
+        final Price entity2 = getPriceEntitySample(2L, 2);
 
         doReturn(List.of(entity1, entity2))
                 .when(repository)
@@ -129,7 +129,7 @@ class PriceServiceImplTest {
 
     @Test
     void test_save_notNullEntity() {
-        final Price entity = getSamplePrice(1L, 1);
+        final Price entity = getPriceEntitySample(1L, 1);
 
         doReturn(entity)
                 .when(repository)
@@ -163,10 +163,10 @@ class PriceServiceImplTest {
     void test_update_notNullEntity() {
         final LocalDateTime previousStartDate = LocalDateTime.now().minusHours(1L);
         final LocalDateTime previousEndDate = LocalDateTime.now().plusDays(1L).minusHours(1L);
-        final Price entity1 = getSamplePrice(1L, 1, previousStartDate, previousEndDate);
+        final Price entity1 = getPriceEntitySample(1L, 1, previousStartDate, previousEndDate);
         final LocalDateTime newStartDate = LocalDateTime.now().plusHours(1L);
         final LocalDateTime newEndDate = LocalDateTime.now().plusDays(1L).plusHours(1L);
-        final Price entity2 = getSamplePrice(2L, 2, newStartDate, newEndDate);
+        final Price entity2 = getPriceEntitySample(2L, 2, newStartDate, newEndDate);
 
         doReturn(Optional.of(entity1))
                 .when(repository)
@@ -211,7 +211,7 @@ class PriceServiceImplTest {
 
     @Test
     void test_update_notFoundEntity() {
-        final Price entity2 = getSamplePrice(2L, 2);
+        final Price entity2 = getPriceEntitySample(2L, 2);
 
         doReturn(Optional.empty())
                 .when(repository)
@@ -227,7 +227,7 @@ class PriceServiceImplTest {
 
     @Test
     void test_update_nullEntity() {
-        final Price entity1 = getSamplePrice(1L, 1);
+        final Price entity1 = getPriceEntitySample(1L, 1);
 
         doReturn(Optional.of(entity1))
                 .when(repository)
@@ -291,8 +291,8 @@ class PriceServiceImplTest {
 
     @Test
     void test_getByBrandId_pricesFound() {
-        final Price entity1 = getSamplePrice(1L, 1);
-        final Price entity2 = getSamplePrice(2L, 2);
+        final Price entity1 = getPriceEntitySample(1L, 1);
+        final Price entity2 = getPriceEntitySample(2L, 2);
 
         doReturn(List.of(entity1, entity2))
                 .when(repository)
@@ -345,8 +345,8 @@ class PriceServiceImplTest {
 
     @Test
     void test_getByProductId_pricesFound() {
-        final Price entity1 = getSamplePrice(1L, 1);
-        final Price entity2 = getSamplePrice(2L, 2);
+        final Price entity1 = getPriceEntitySample(1L, 1);
+        final Price entity2 = getPriceEntitySample(2L, 2);
 
         doReturn(List.of(entity1, entity2))
                 .when(repository)
@@ -401,8 +401,8 @@ class PriceServiceImplTest {
     void test_getByStartDateNotAfterAndEndDateNotBefore_pricesFound() {
         final LocalDateTime now = LocalDateTime.now();
 
-        final Price entity1 = getSamplePrice(1L, 1, now.minusDays(1L), now.plusDays(1L));
-        final Price entity2 = getSamplePrice(2L, 2, now.minusDays(1L), now.plusDays(1L));
+        final Price entity1 = getPriceEntitySample(1L, 1, now.minusDays(1L), now.plusDays(1L));
+        final Price entity2 = getPriceEntitySample(2L, 2, now.minusDays(1L), now.plusDays(1L));
 
         doReturn(List.of(entity1, entity2))
                 .when(repository)
@@ -459,8 +459,8 @@ class PriceServiceImplTest {
     void test_getHighestPriorityByProductIdAndBrandIdAndStartDateNotAfterAndEndDateNotBefore_pricesFound() {
         final LocalDateTime now = LocalDateTime.now();
 
-        final Price entity1 = getSamplePrice(1L, 1, now.minusDays(1L), now.plusDays(1L));
-        final Price entity2 = getSamplePrice(2L, 2, now.minusDays(1L), now.plusDays(1L));
+        final Price entity1 = getPriceEntitySample(1L, 1, now.minusDays(1L), now.plusDays(1L));
+        final Price entity2 = getPriceEntitySample(2L, 2, now.minusDays(1L), now.plusDays(1L));
 
         doReturn(List.of(entity1, entity2))
                 .when(repository)
@@ -497,8 +497,8 @@ class PriceServiceImplTest {
     void test_getHighestPriorityByProductIdAndBrandIdAndStartDateNotAfterAndEndDateNotBefore_nullDate() {
         final LocalDateTime now = LocalDateTime.now();
 
-        final Price entity1 = getSamplePrice(1L, 1, now.minusDays(1L), now.plusDays(1L));
-        final Price entity2 = getSamplePrice(2L, 2, now.minusDays(1L), now.plusDays(1L));
+        final Price entity1 = getPriceEntitySample(1L, 1, now.minusDays(1L), now.plusDays(1L));
+        final Price entity2 = getPriceEntitySample(2L, 2, now.minusDays(1L), now.plusDays(1L));
 
         doReturn(List.of(entity1, entity2))
                 .when(repository)
@@ -526,10 +526,10 @@ class PriceServiceImplTest {
         verifyNoInteractions(repository);
     }
 
-    private Price getSamplePrice(final Long id,
-                                 final Integer priority,
-                                 final LocalDateTime startDate,
-                                 final LocalDateTime endDate) {
+    private Price getPriceEntitySample(final Long id,
+                                       final Integer priority,
+                                       final LocalDateTime startDate,
+                                       final LocalDateTime endDate) {
         return Price.builder()
                 .id(id)
                 .brand(Brand.builder()
@@ -555,8 +555,8 @@ class PriceServiceImplTest {
                 .build();
     }
 
-    private Price getSamplePrice(final Long id,
-                                 final Integer priority) {
-        return getSamplePrice(id, priority, LocalDateTime.now().minusHours(1L), LocalDateTime.now().plusDays(1L).minusHours(1L));
+    private Price getPriceEntitySample(final Long id,
+                                       final Integer priority) {
+        return getPriceEntitySample(id, priority, LocalDateTime.now().minusHours(1L), LocalDateTime.now().plusDays(1L).minusHours(1L));
     }
 }

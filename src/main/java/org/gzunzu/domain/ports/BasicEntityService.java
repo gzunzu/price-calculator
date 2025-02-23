@@ -2,21 +2,22 @@ package org.gzunzu.domain.ports;
 
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import org.gzunzu.domain.model.BasicEntity;
 
 import java.util.List;
 
 public interface BasicEntityService<E extends BasicEntity<E, K>, K> {
 
-    E getById(final K id) throws EntityNotFoundException;
+    E getById(@NotNull final K id) throws EntityNotFoundException;
 
     List<E> getAll();
 
-    E save(final E entity);
+    E save(@NotNull final E entity);
 
-    E update(final K id, final E entity) throws EntityNotFoundException;
+    E update(@NotNull final K id, @NotNull final E entity) throws EntityNotFoundException;
 
-    void delete(final K id);
+    void delete(@NotNull final K id);
 
     void deleteAll();
 }
