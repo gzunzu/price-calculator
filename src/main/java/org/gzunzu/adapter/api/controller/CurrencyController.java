@@ -1,4 +1,4 @@
-package org.gzunzu.adapter.api.controllers;
+package org.gzunzu.adapter.api.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.gzunzu.adapter.api.dto.request.CurrencyAddRq;

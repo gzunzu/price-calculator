@@ -16,6 +16,7 @@ operations.
 - **Spring Validation**
 - **MapStruct** (for DTO to Entity mapping)
 - **Lombok** (to reduce boilerplate code)
+- **JUnit 5**, **Mockito** and **AssertJ** (for unitary testing)
 - **Rest Template** (for integration testing)
 - **SpringDoc OpenAPI** (for API documentation)
 
@@ -66,6 +67,13 @@ This ensures that **MapStruct** generates the necessary mapper implementations r
 
 ## Testing
 
+### Unitary Tests
+
+Unit tests have been implemented for service and controller layers using **JUnit 5**, **Mockito**, and **AssertJ** to ensure the correctness and
+reliability of the application's core logic. These tests focus on validating business rules and request handling while isolating dependencies through
+mocking. The **entity model** and **DTO classes** have been excluded from unit testing, as they primarily serve as data structures without business
+logic.
+
 ### Integration Tests
 
 Integration tests for the [PriceController](src/test/java/org/gzunzu/adapter/api/controllers/PriceControllerIT.java) are implemented as per the
@@ -78,8 +86,18 @@ exercise requirements.
 mvn install
 ```
 
-## Possible Improvements
+## Suggested Improvements
 
+The following improvements could further enhance the project's maintainability, scalability, and security:
+
+- Implement **Pagination in Controller Responses**: Introduce pagination for API responses using a standard Spring library, such as Spring Data
+  Pageable. This would optimize performance by preventing large data loads and improving client-side data handling.
+- Enhance **Error Handling** with Structured Responses: Implement a robust error-handling mechanism by returning standardized ErrorDTO response
+  bodies. This approach would provide users with meaningful error details, such as HTTP status codes, error messages, and troubleshooting hints,
+  improving the overall API usability and debugging experience.
+- Integrate **Authentication and Authorization**: Store user credentials in the database and implement authentication and authorization mechanisms
+  using Spring Security. This would ensure secure access to protected resources, enforcing proper credential validation and role-based access
+  control (RBAC) in controllers.
 - **Domain Layer Isolation:** Introduce a separate domain layer between DTOs and Entities to fully isolate domain models from database structures and
   request parameters.
 - **High Load Handling:** If the application needs to handle a high volume of incoming HTTP requests, consider implementing a **message queue system (
@@ -92,4 +110,3 @@ usage of generics, layered architecture, and structured database design ensures 
 
 ---
 Developed as part of a technical assessment. Requirements can be found [here](src/main/resources/docs/TestJava2020.txt).
-

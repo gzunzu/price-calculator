@@ -2,13 +2,10 @@ package org.gzunzu.adapter.api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.gzunzu.domain.model.Brand;
-import org.gzunzu.domain.model.Currency;
-import org.gzunzu.domain.model.Product;
-import org.gzunzu.domain.model.Rate;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class PriceRs implements BasicCrudRs, Serializable {
 
     @Serial
@@ -27,13 +25,13 @@ public class PriceRs implements BasicCrudRs, Serializable {
     private Long id;
 
     @JsonProperty(value = "brand", required = true)
-    private Brand brand;
+    private BrandRs brand;
 
     @JsonProperty(value = "product", required = true)
-    private Product product;
+    private ProductRs product;
 
     @JsonProperty(value = "rate", required = true)
-    private Rate rate;
+    private RateRs rate;
 
     @JsonProperty(value = "startDate", required = true)
     private LocalDateTime startDate;
@@ -45,7 +43,7 @@ public class PriceRs implements BasicCrudRs, Serializable {
     private Float amount;
 
     @JsonProperty(value = "currency", required = true)
-    private Currency currency;
+    private CurrencyRs currency;
 
     @JsonProperty(value = "priority", required = true)
     private Integer priority;
