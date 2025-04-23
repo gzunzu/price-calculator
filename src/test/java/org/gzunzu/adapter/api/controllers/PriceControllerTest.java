@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -101,17 +102,14 @@ class PriceControllerTest {
                 .when(service)
                 .getById(1L);
 
-        final ResponseEntity<PriceRs> actual = uat.get(1L);
+        final Throwable thrown = catchThrowable(() -> uat.get(1L));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -120,17 +118,14 @@ class PriceControllerTest {
                 .when(service)
                 .getById(1L);
 
-        final ResponseEntity<PriceRs> actual = uat.get(1L);
+        final Throwable thrown = catchThrowable(() -> uat.get(1L));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -244,17 +239,14 @@ class PriceControllerTest {
                 .when(service)
                 .save(entity);
 
-        final ResponseEntity<PriceRs> actual = uat.add(rq);
+        final Throwable thrown = catchThrowable(() -> uat.add(rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -299,17 +291,14 @@ class PriceControllerTest {
                 .when(service)
                 .update(2L, entity);
 
-        final ResponseEntity<PriceRs> actual = uat.update(2L, rq);
+        final Throwable thrown = catchThrowable(() -> uat.update(2L, rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -324,17 +313,14 @@ class PriceControllerTest {
                 .when(service)
                 .update(2L, entity);
 
-        final ResponseEntity<PriceRs> actual = uat.update(2L, rq);
+        final Throwable thrown = catchThrowable(() -> uat.update(2L, rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -362,17 +348,14 @@ class PriceControllerTest {
                 .when(service)
                 .delete(1L);
 
-        final ResponseEntity<Void> actual = uat.delete(1L);
+        final Throwable thrown = catchThrowable(() -> uat.delete(1L));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -400,17 +383,14 @@ class PriceControllerTest {
                 .when(service)
                 .deleteAll();
 
-        final ResponseEntity<Void> actual = uat.deleteAll();
+        final Throwable thrown = catchThrowable(() -> uat.deleteAll());
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -452,17 +432,14 @@ class PriceControllerTest {
                         rq.getProductId(),
                         rq.getPurchaseDatetime());
 
-        final ResponseEntity<PricePriorityRs> actual = uat.getPriority(rq);
+        final Throwable thrown = catchThrowable(() -> uat.getPriority(rq));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -475,17 +452,14 @@ class PriceControllerTest {
                         rq.getProductId(),
                         rq.getPurchaseDatetime());
 
-        final ResponseEntity<PricePriorityRs> actual = uat.getPriority(rq);
+        final Throwable thrown = catchThrowable(() -> uat.getPriority(rq));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     private PriceAddRq getPriceAddRqSample(final Integer priority,

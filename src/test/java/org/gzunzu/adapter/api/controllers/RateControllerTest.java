@@ -25,6 +25,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -95,17 +96,14 @@ class RateControllerTest {
                 .when(service)
                 .getById(1L);
 
-        final ResponseEntity<RateRs> actual = uat.get(1L);
+        final Throwable thrown = catchThrowable(() -> uat.get(1L));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -114,17 +112,14 @@ class RateControllerTest {
                 .when(service)
                 .getById(1L);
 
-        final ResponseEntity<RateRs> actual = uat.get(1L);
+        final Throwable thrown = catchThrowable(() -> uat.get(1L));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -262,17 +257,14 @@ class RateControllerTest {
                 .when(service)
                 .save(entity);
 
-        final ResponseEntity<RateRs> actual = uat.add(rq);
+        final Throwable thrown = catchThrowable(() -> uat.add(rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -294,12 +286,12 @@ class RateControllerTest {
                 .toEntity(rq);
         doReturn(entity)
                 .when(service)
-                .update(2L, entity);
+                .update(1L, entity);
         doReturn(dto)
                 .when(mapper)
                 .toRs(entity);
 
-        final ResponseEntity<RateRs> actual = uat.update(2L, rq);
+        final ResponseEntity<RateRs> actual = uat.update(1L, rq);
 
         verifyNoMoreInteractions(service,
                 mapper);
@@ -327,19 +319,16 @@ class RateControllerTest {
                 .toEntity(rq);
         doThrow(EntityNotFoundException.class)
                 .when(service)
-                .update(2L, entity);
+                .update(1L, entity);
 
-        final ResponseEntity<RateRs> actual = uat.update(2L, rq);
+        final Throwable thrown = catchThrowable(() -> uat.update(1L, rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -356,19 +345,16 @@ class RateControllerTest {
                 .toEntity(rq);
         doThrow(InputMismatchException.class)
                 .when(service)
-                .update(2L, entity);
+                .update(1L, entity);
 
-        final ResponseEntity<RateRs> actual = uat.update(2L, rq);
+        final Throwable thrown = catchThrowable(() -> uat.update(1L, rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -396,17 +382,14 @@ class RateControllerTest {
                 .when(service)
                 .delete(1L);
 
-        final ResponseEntity<Void> actual = uat.delete(1L);
+        final Throwable thrown = catchThrowable(() -> uat.delete(1L));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -434,16 +417,13 @@ class RateControllerTest {
                 .when(service)
                 .deleteAll();
 
-        final ResponseEntity<Void> actual = uat.deleteAll();
+        final Throwable thrown = catchThrowable(() -> uat.deleteAll());
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 }

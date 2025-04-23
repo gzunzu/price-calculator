@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,20 +46,19 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
                     description = "Entity found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "404",
-                    description = "Entity not found"),
+                    description = "Entity not found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500",
-                    description = "Error searching entity")
+                    description = "Error searching entity",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<R> get(@PathVariable(name = "id") final K id) {
         try {
             return ResponseEntity.ok(mapper.toRs(service.getById(id)));
-        } catch (final EntityNotFoundException exception) {
-            log.warn(exception.getMessage(), exception);
-            return ResponseEntity.notFound().build();
         } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
+            throw exception;
         }
     }
 
@@ -72,9 +70,11 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = List.class))),
             @ApiResponse(responseCode = "204",
-                    description = "No entities found"),
+                    description = "No entities found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500",
-                    description = "Error searching entities")
+                    description = "Error searching entities",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<R>> getAll() {
@@ -94,7 +94,8 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
                     description = "Entity created",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500",
-                    description = "Error creating entity")
+                    description = "Error creating entity",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -103,7 +104,7 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
             return new ResponseEntity<>(mapper.toRs(service.save(mapper.toEntity(rq))), HttpStatus.CREATED);
         } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
+            throw exception;
         }
     }
 
@@ -115,9 +116,11 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = BrandRs.class))),
             @ApiResponse(responseCode = "404",
-                    description = "No entity found with provided ID"),
+                    description = "No entity found with provided ID",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500",
-                    description = "Error updating entity")
+                    description = "Error updating entity",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @PatchMapping(value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -126,12 +129,9 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
                                     @RequestBody @Valid final U rq) {
         try {
             return ResponseEntity.ok(mapper.toRs(service.update(id, mapper.toEntity(rq))));
-        } catch (final EntityNotFoundException exception) {
-            log.warn(exception.getMessage(), exception);
-            return ResponseEntity.notFound().build();
         } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
+            throw exception;
         }
     }
 
@@ -141,7 +141,8 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
             @ApiResponse(responseCode = "204",
                     description = "Entity deleted"),
             @ApiResponse(responseCode = "500",
-                    description = "Error deleting entity")
+                    description = "Error deleting entity",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") final K id) {
@@ -150,7 +151,7 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
             return ResponseEntity.noContent().build();
         } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
+            throw exception;
         }
     }
 
@@ -160,7 +161,8 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
             @ApiResponse(responseCode = "204",
                     description = "All entities deleted"),
             @ApiResponse(responseCode = "500",
-                    description = "Error deleting entities")
+                    description = "Error deleting entities",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @DeleteMapping(value = "/all")
     public ResponseEntity<Void> deleteAll() {
@@ -169,7 +171,7 @@ public abstract class BasicEntityController<E extends BasicEntity<E, K>,
             return ResponseEntity.noContent().build();
         } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
+            throw exception;
         }
     }
 }

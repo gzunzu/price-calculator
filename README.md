@@ -10,7 +10,7 @@ operations.
 ## Technologies Used
 
 - **Java 21**
-- **Spring Boot 3.1.0**
+- **Spring Boot 3.2.4**
 - **H2 in-memory database**
 - **Spring Data JPA**
 - **Spring Validation**
@@ -92,9 +92,6 @@ The following improvements could further enhance the project's maintainability, 
 
 - Implement **Pagination in Controller Responses**: Introduce pagination for API responses using a standard Spring library, such as Spring Data
   Pageable. This would optimize performance by preventing large data loads and improving client-side data handling.
-- Enhance **Error Handling** with Structured Responses: Implement a robust error-handling mechanism by returning standardized ErrorDTO response
-  bodies. This approach would provide users with meaningful error details, such as HTTP status codes, error messages, and troubleshooting hints,
-  improving the overall API usability and debugging experience.
 - Integrate **Authentication and Authorization**: Store user credentials in the database and implement authentication and authorization mechanisms
   using Spring Security. This would ensure secure access to protected resources, enforcing proper credential validation and role-based access
   control (RBAC) in controllers.

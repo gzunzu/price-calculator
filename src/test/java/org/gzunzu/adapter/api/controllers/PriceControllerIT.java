@@ -2,6 +2,7 @@ package org.gzunzu.adapter.api.controllers;
 
 import org.gzunzu.adapter.api.dto.request.PricePriorityRq;
 import org.gzunzu.adapter.api.dto.response.PricePriorityRs;
+import org.gzunzu.adapter.api.exception.HttpError;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,5 +113,19 @@ class PriceControllerIT {
         assertEquals(LocalDateTime.of(2020, 12, 31, 23, 59, 59), pricePriority.getEndDate());
         assertEquals(38.95f, pricePriority.getAmount());
         assertEquals("EUR", pricePriority.getCurrencyName());
+    }
+
+    @Test
+    void test_pricePriority_20250615_2100_noRateFound() {
+        final PricePriorityRq rq = new PricePriorityRq(1, 35455L, LocalDateTime.of(2025, 6, 15, 21, 0));
+
+        final ResponseEntity<HttpError> response = restTemplate.postForEntity("/price/priority", rq, HttpError.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        final HttpError httpError = response.getBody();
+        assertEquals(404, httpError.httpValue());
+        assertNotNull(httpError.timestamp());
+        assertEquals("No Price configured in DB with brandId «1», productId «35455» and date «2025-06-15T21:00».", httpError.message());
     }
 }
