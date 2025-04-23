@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.gzunzu.adapter.api.dto.request.PriceAddRq;
@@ -44,9 +43,11 @@ public class PriceController extends BasicEntityController<Price, Long, PriceAdd
                     description = "Entity found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "404",
-                    description = "Entity not found"),
+                    description = "Entity not found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500",
-                    description = "Error searching entity")
+                    description = "Error searching entity",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     @PostMapping(value = "/priority", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,12 +57,9 @@ public class PriceController extends BasicEntityController<Price, Long, PriceAdd
                     rq.getProductId(),
                     rq.getPurchaseDatetime());
             return ResponseEntity.ok(priceMapper.toPricePriorityRs(priorityPrice));
-        } catch (final EntityNotFoundException exception) {
-            log.warn(exception.getMessage(), exception);
-            return ResponseEntity.notFound().build();
         } catch (final Exception exception) {
             log.warn(exception.getMessage(), exception);
-            return ResponseEntity.internalServerError().build();
+            throw exception;
         }
     }
 }

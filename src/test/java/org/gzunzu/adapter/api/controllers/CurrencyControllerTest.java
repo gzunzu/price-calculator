@@ -25,6 +25,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -95,17 +96,14 @@ class CurrencyControllerTest {
                 .when(service)
                 .getById(1);
 
-        final ResponseEntity<CurrencyRs> actual = uat.get(1);
+        final Throwable thrown = catchThrowable(() -> uat.get(1));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -114,17 +112,14 @@ class CurrencyControllerTest {
                 .when(service)
                 .getById(1);
 
-        final ResponseEntity<CurrencyRs> actual = uat.get(1);
+        final Throwable thrown = catchThrowable(() -> uat.get(1));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -262,17 +257,14 @@ class CurrencyControllerTest {
                 .when(service)
                 .save(entity);
 
-        final ResponseEntity<CurrencyRs> actual = uat.add(rq);
+        final Throwable thrown = catchThrowable(() -> uat.add(rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -329,17 +321,14 @@ class CurrencyControllerTest {
                 .when(service)
                 .update(1, entity);
 
-        final ResponseEntity<CurrencyRs> actual = uat.update(1, rq);
+        final Throwable thrown = catchThrowable(() -> uat.update(1, rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
@@ -358,17 +347,14 @@ class CurrencyControllerTest {
                 .when(service)
                 .update(1, entity);
 
-        final ResponseEntity<CurrencyRs> actual = uat.update(1, rq);
+        final Throwable thrown = catchThrowable(() -> uat.update(1, rq));
 
         verifyNoMoreInteractions(service,
                 mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -396,17 +382,14 @@ class CurrencyControllerTest {
                 .when(service)
                 .delete(1);
 
-        final ResponseEntity<Void> actual = uat.delete(1);
+        final Throwable thrown = catchThrowable(() -> uat.delete(1));
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 
     @Test
@@ -434,16 +417,13 @@ class CurrencyControllerTest {
                 .when(service)
                 .deleteAll();
 
-        final ResponseEntity<Void> actual = uat.deleteAll();
+        final Throwable thrown = catchThrowable(() -> uat.deleteAll());
 
         verifyNoMoreInteractions(service);
         verifyNoInteractions(mapper);
 
-        assertThat(actual)
-                .isNotNull();
-        assertThat(actual.getStatusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(actual.getBody())
-                .isNull();
+        assertThat(thrown)
+                .isNotNull()
+                .isInstanceOf(InputMismatchException.class);
     }
 }
